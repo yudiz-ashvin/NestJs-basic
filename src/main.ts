@@ -9,16 +9,23 @@ import {
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
+  // start nest using Fastify
   // const app = await NestFactory.create<NestFastifyApplication>(
   //   AppModule,
   //   new FastifyAdapter(),
   // );
+
+  // start nest using ExpressJS
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['warn', 'error'],
   });
+  // validation pipeline for validate incoming data
   app.useGlobalPipes(new ValidationPipe());
 
+  // morgan for logs
   app.use(morgan('dev'));
+
+  // start nest server in port
   await app.listen(8080);
 }
 bootstrap();
