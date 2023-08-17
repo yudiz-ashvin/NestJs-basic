@@ -19,6 +19,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['warn', 'error'],
   });
+
   // validation pipeline for validate incoming data
   app.useGlobalPipes(new ValidationPipe());
 
@@ -26,6 +27,6 @@ async function bootstrap() {
   app.use(morgan('dev'));
 
   // start nest server in port
-  await app.listen(8080);
+  await app.listen(process.env.PORT);
 }
 bootstrap();

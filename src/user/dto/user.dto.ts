@@ -18,4 +18,8 @@ export class UserData {
   )
   @IsNotEmpty()
   sPassword: string;
+
+  @Matches(RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'))
+  @IsNotEmpty()
+  sEmail: string;
 }
