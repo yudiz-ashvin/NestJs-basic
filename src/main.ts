@@ -7,6 +7,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { userAuth } from './middlewares/user.middleares';
 
 async function bootstrap() {
   // start nest using Fastify
@@ -25,6 +26,9 @@ async function bootstrap() {
 
   // morgan for logs
   app.use(morgan('dev'));
+
+  // user middleware as global
+  // app.use(userAuth);
 
   // start nest server in port
   await app.listen(process.env.PORT);

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -10,14 +11,17 @@ import {
   Param,
   Post,
   Req,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
+import { Request, Response } from 'express';
 import { ObjectId } from 'mongoose';
-import { ObjectUnsubscribedError } from 'rxjs';
+import { ObjectUnsubscribedError, retry } from 'rxjs';
 import { UserData } from './dto/user.dto';
 import { UserService } from './user.service';
 
-@Controller('/users')
+@Controller('users')
 export class UserController {
   constructor(private user: UserService) {
     // @Inject('User')
@@ -27,9 +31,21 @@ export class UserController {
 
   @Get('/profile/:id')
   // @HttpCode(200)
+  // @UseGuards(userAuth)
   @HttpCode(HttpStatus.OK)
   getProfile(@Param('id') id: string) {
     return this.user.userProfile(id);
+  }
+
+  @Get('auth')
+  @HttpCode(HttpStatus.OK)
+  checkAuth(@Req() req: Request, @Res() res: Response) {
+    console.log(req.body);
+    // throw new BadRequestException('invalide user');
+    return res.json({
+      message: 'success',
+      ua: req['ua'],
+    });
   }
 
   @Post('/auth')
