@@ -9,6 +9,7 @@ import {
   Ip,
   Optional,
   Param,
+  ParseIntPipe,
   Post,
   Req,
   Res,
@@ -19,6 +20,7 @@ import { Request, Response } from 'express';
 import { ObjectId } from 'mongoose';
 import { ObjectUnsubscribedError, retry } from 'rxjs';
 import { UserData } from './dto/user.dto';
+import { ParseObjectIdPipe } from './pipes/validateuserdata/validateuserdata.pipe';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -32,15 +34,14 @@ export class UserController {
   @Get('/profile/:id')
   // @HttpCode(200)
   // @UseGuards(userAuth)
-  @HttpCode(HttpStatus.OK)
-  getProfile(@Param('id') id: string) {
+  // @HttpCode(404)
+  getProfile(@Param('id', ParseObjectIdPipe) id: ObjectId) {
     return this.user.userProfile(id);
   }
 
   @Get('auth')
   @HttpCode(HttpStatus.OK)
   checkAuth(@Req() req: Request, @Res() res: Response) {
-    console.log(req.body);
     // throw new BadRequestException('invalide user');
     return res.json({
       message: 'success',
@@ -52,5 +53,10 @@ export class UserController {
   registerUser(@Body() dto: UserData, @Ip() ip: string) {
     console.log(ip);
     return this.user.createUser(dto);
+  }
+
+  @Get('allUser')
+  allUSer() {
+    return this.user.getAllUser();
   }
 }

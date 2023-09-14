@@ -1,6 +1,7 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsString,
   Matches,
   MaxLength,
@@ -22,4 +23,8 @@ export class UserData {
   @Matches(RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'))
   @IsNotEmpty()
   sEmail: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  nAge: number;
 }

@@ -7,7 +7,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { userAuth } from './middlewares/user.middleares';
+import { AuthGuard } from './user/guards/auth/auth.guard';
 
 async function bootstrap() {
   // start nest using Fastify
@@ -17,6 +17,15 @@ async function bootstrap() {
   // );
 
   // start nest using ExpressJS
+  /*
+    * LOGGER
+     - 'log'
+     - 'error'
+     - 'warn'
+     - 'debug'
+     - 'verbose'
+   
+   */
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['warn', 'error'],
   });
@@ -29,6 +38,8 @@ async function bootstrap() {
 
   // user middleware as global
   // app.use(userAuth);
+
+  app.useGlobalGuards(new AuthGuard());
 
   // start nest server in port
   await app.listen(process.env.PORT);
