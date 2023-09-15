@@ -24,7 +24,7 @@ export class UserData {
   @IsNotEmpty()
   sEmail: string;
 
-  @IsNumber()
+  // @IsNumber()
   @IsNotEmpty()
   nAge: number;
 }

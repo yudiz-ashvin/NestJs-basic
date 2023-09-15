@@ -10,38 +10,37 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AuthGuard } from './user/guards/auth/auth.guard';
 
 async function bootstrap() {
-  // start nest using Fastify
+  //* start nest using Fastify
   // const app = await NestFactory.create<NestFastifyApplication>(
   //   AppModule,
   //   new FastifyAdapter(),
   // );
 
-  // start nest using ExpressJS
-  /*
-    * LOGGER
-     - 'log'
-     - 'error'
-     - 'warn'
-     - 'debug'
-     - 'verbose'
-   
-   */
+  /* LOGGER
+  - 'log'
+  - 'error'
+  - 'warn'
+  - 'debug'
+  - 'verbose'
+  */
+
+  //* start nest using ExpressJS
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['warn', 'error'],
   });
 
-  // validation pipeline for validate incoming data
+  //* validation pipeline for validate incoming data
   app.useGlobalPipes(new ValidationPipe());
 
-  // morgan for logs
+  //* morgan for logs
   app.use(morgan('dev'));
 
-  // user middleware as global
+  //* user middleware as global
   // app.use(userAuth);
 
   app.useGlobalGuards(new AuthGuard());
 
-  // start nest server in port
+  //* start nest server in port
   await app.listen(process.env.PORT);
 }
 bootstrap();

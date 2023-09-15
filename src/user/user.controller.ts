@@ -14,6 +14,7 @@ import {
   Req,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 import { Request, Response } from 'express';
@@ -21,9 +22,12 @@ import { ObjectId } from 'mongoose';
 import { ObjectUnsubscribedError, retry } from 'rxjs';
 import { UserData } from './dto/user.dto';
 import { ParseObjectIdPipe } from './pipes/validateuserdata/validateuserdata.pipe';
+import { UserAuthInterceptor } from './user-auth-interceptor/user-auth-interceptor.interceptor';
 import { UserService } from './user.service';
+import { User } from './userdata/userdata.decorator';
 
 @Controller('users')
+// @UseInterceptors(UserAuthInterceptor)
 export class UserController {
   constructor(private user: UserService) {
     // @Inject('User')
@@ -52,8 +56,17 @@ export class UserController {
   @Post('/auth')
   registerUser(@Body() dto: UserData, @Ip() ip: string) {
     console.log(ip);
+    // throw new BadRequestException('invalide user');
     return this.user.createUser(dto);
   }
+
+  //* using custom decorator
+  // @Post('/auth')
+  // registerUser(@User() dto: UserData, @Ip() ip: string) {
+  //   console.log(ip);
+  //   // throw new BadRequestException('invalide user');
+  //   return this.user.createUser(dto);
+  // }
 
   @Get('allUser')
   allUSer() {
